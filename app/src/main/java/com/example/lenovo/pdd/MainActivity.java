@@ -9,7 +9,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,12 +34,19 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,6 +54,8 @@ import java.util.Locale;
 import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
+    //change this shit as per your ip adress where django is hosted
+    static final String api_url="http://192.168.43.62:8000/api/";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private int PICK_IMAGE_REQUEST = 2;
     static final int MY_PERMISSION_WRITE_EX_STORAGE = 3;
@@ -53,9 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private Uri mCapturedImageURI;
     String pictureImagePath;
-    String encodedImage;
+    String encodedImage="";
     boolean lan_bool = true;
     private Locale myLocale;
+    private static final String TAG = "Main Activity";
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -67,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         captureButton = (Button) findViewById(R.id.captureButton);
         imageHolder = (ImageView)findViewById(R.id.imageViewer);
@@ -98,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri outputFileUri = Uri.fromFile(file);
 
                 Intent cameraApp = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraApp.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 if (cameraApp.resolveActivity(getPackageManager()) != null ) {
                     cameraApp.putExtra(MediaStore.EXTRA_OUTPUT,outputFileUri);
                     startActivityForResult(cameraApp, REQUEST_IMAGE_CAPTURE);
@@ -113,6 +129,18 @@ public class MainActivity extends AppCompatActivity {
                 chooseImage.setType("image/*");
                 chooseImage.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(chooseImage,PICK_IMAGE_REQUEST);
+            }
+        });
+        
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!encodedImage.isEmpty()) {
+                    Log.d(TAG, "onClick: Test Button:" + encodedImage);
+                    AsyncTaskRunner runner = new AsyncTaskRunner();
+                    runner.execute(encodedImage);
+
+                }
             }
         });
 
@@ -145,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream );
                 byte [] b = byteArrayOutputStream.toByteArray();
                 encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+                ///load async
                 imageHolder.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -240,6 +270,34 @@ public class MainActivity extends AppCompatActivity {
     private void updateTexts()
     {
 
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<String, String,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                final String url = new String(api_url);
+                Image image = new Image();
+                image.setFilename("collected data");
+                image.setImage(params[0]);
+                RestTemplate restTemplate = new RestTemplate();
+                HttpEntity<Image> requestEntity = new HttpEntity<Image>(image, headers);
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                Response greeting = restTemplate.postForObject(url,requestEntity,Response.class);
+                return greeting.getDisease();
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+            return "failed";
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
     }
 
 

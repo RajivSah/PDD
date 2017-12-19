@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="2dp"
+    android:paddingTop="16dp"
+    tools:context="com.example.lenovo.pdd.MainActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:minHeight="100dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/imageViewer"
+        android:layout_weight="0.6"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center"
+        android:layout_weight="0.4"
+        >
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/Capture"
+        android:id="@+id/captureButton"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/round_btn"
+        android:layout_margin="10dp"
+        android:textColor="#ffffff"
+        />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/Test"
+        android:id="@+id/testButton"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/round_btn"
+        android:layout_margin="10dp"
+        android:textColor="#ffffff"
+        />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/Pick"
+        android:id="@+id/pickButton"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/round_btn"
+        android:layout_margin="10dp"
+        android:textColor="#ffffff"
+        />
+    </LinearLayout>
+
+</LinearLayout>

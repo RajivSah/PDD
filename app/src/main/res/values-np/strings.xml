@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PDD</string>
+    <string name="Capture">खिच्‍नुस</string>
+    <string name="Test">जाच्‍नुस</string>
+    <string name="Pick"> Gallery बाट छान्‍नुस</string>
+    <string name="language">Eng</string>
+</resources>

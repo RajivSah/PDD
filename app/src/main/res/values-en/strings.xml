@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PDD</string>
+    <string name="Capture">Capture</string>
+    <string name="Test">Test</string>
+    <string name="Pick">Pick from Gallery</string>
+    <string name="language">नेपाली</string>
+</resources>

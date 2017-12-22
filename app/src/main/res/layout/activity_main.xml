@@ -32,6 +32,8 @@
         android:id="@+id/captureButton"
         android:layout_gravity="center_vertical|center_horizontal"
         android:background="@drawable/round_btn"
+        android:drawableTop="@drawable/technology"
+        android:paddingTop="20dp"
         android:layout_margin="10dp"
         android:textColor="#ffffff"
         />
@@ -42,8 +44,11 @@
         android:id="@+id/testButton"
         android:layout_gravity="center_vertical|center_horizontal"
         android:background="@drawable/round_btn"
+        android:drawableTop="@drawable/flask"
         android:layout_margin="10dp"
         android:textColor="#ffffff"
+        android:paddingTop="20dp"
+
         />
     <Button
         android:layout_width="100dp"
@@ -54,6 +59,11 @@
         android:background="@drawable/round_btn"
         android:layout_margin="10dp"
         android:textColor="#ffffff"
+        android:paddingTop="20dp"
+        android:drawableTop="@drawable/gallery"
+
+
+
         />
     </LinearLayout>
 

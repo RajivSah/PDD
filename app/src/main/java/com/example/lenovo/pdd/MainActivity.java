@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     String encodedImage;
     boolean lan_bool = true;
     private Locale myLocale;
+    private String langPref = "Language";
+    private  String lang ="en";
+    MenuItem lanItem;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -193,16 +196,27 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        lanItem = menu.findItem(R.id.language);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String lang = "en";
         switch (item.getItemId()) {
             case R.id.language:
-                lang = "np";
-                Toast.makeText(this, "skds", Toast.LENGTH_SHORT).show();
+                SharedPreferences prefs = getSharedPreferences("CommonPrefs",Activity.MODE_PRIVATE);
+                prefs.getString(langPref,lang);
+
+                if (lang.equals("en"))
+                {
+                    lang = "np";
+                    item.setTitle("Eng");
+                }
+                else
+                {
+                    lang = "en";
+                    item.setTitle("नेपाली");
+                }
                 changeLang(lang);
                 return true;
             default:
@@ -212,14 +226,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadLoacle()
     {
-        String langPref = "Language";
+
         SharedPreferences preferences = getSharedPreferences("CommonPrefs",Activity.MODE_PRIVATE);
         String language = preferences.getString(langPref,"");
         changeLang(language);
     }
     public void saveLocale(String lang)
     {
-        String langPref = "Language";
         SharedPreferences preferences = getSharedPreferences("CommonPrefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor =preferences.edit();
         editor.putString(langPref, lang);
@@ -239,8 +252,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void updateTexts()
     {
+        captureButton.setText(R.string.Capture);
+        testButton.setText(R.string.Test);
+        pickButton.setText(R.string.Pick);
+        invalidateOptionsMenu();
 
     }
+
+
 
 
 
